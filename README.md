@@ -1,6 +1,10 @@
 # Maharaja - Authentic Indian Restaurant Website
 
-![Maharaja Restaurant](https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80)
+![Maharaja Restaurant](https://i.postimg.cc/JhkbNDq1/ksjdhksjd.png)
+
+## 🌍 Live Demo
+
+Check out the live version of Maharaja - Authentic Indian Restaurant Website: [Maharaja - Authentic Indian Restaurant Website Live](https://maharaja-a-simple-restaurant.netlify.app/)
 
 ## Overview
 
@@ -165,10 +169,6 @@ The project uses Tailwind CSS with a custom configuration:
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
