@@ -51,7 +51,7 @@ describe('ReservationPage — form validation', () => {
 
   it('shows error when email is invalid', async () => {
     renderPage();
-    await userEvent.type(screen.getByLabelText(/email$/i), 'not-an-email');
+    await userEvent.type(screen.getByLabelText(/^email/i), 'not-an-email');
     await userEvent.click(screen.getByRole('button', { name: /confirm/i }));
     await waitFor(() => {
       expect(screen.getByText(/invalid email/i)).toBeInTheDocument();
@@ -64,7 +64,7 @@ describe('ReservationPage — form validation', () => {
     await userEvent.type(screen.getByLabelText(/phone \*/i), '+91 9876543210');
     await userEvent.click(screen.getByRole('button', { name: /confirm/i }));
     await waitFor(() => {
-      expect(screen.getByText(/select a time/i)).toBeInTheDocument();
+      expect(screen.getByText(/please select a time slot/i)).toBeInTheDocument();
     });
   });
 
@@ -105,6 +105,6 @@ describe('ReservationPage — form validation', () => {
 
     await userEvent.click(screen.getByRole('button', { name: /confirm/i }));
 
-    expect(screen.getByRole('button', { name: /submitting/i })).toBeDisabled();
+    expect(screen.getByRole('button', { name: /confirming/i })).toBeDisabled();
   });
 });
