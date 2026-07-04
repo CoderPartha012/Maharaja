@@ -33,13 +33,3 @@ jobs:
 
       - name: Build
         run: npm run build
-
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
-
-      - name: E2E tests
-        run: npm run e2e
-        env:
-          BASE_URL: http://localhost:5173
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}

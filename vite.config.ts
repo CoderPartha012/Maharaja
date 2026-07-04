@@ -43,7 +43,13 @@ export default defineConfig(() => ({
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
-    exclude: ['node_modules/**', 'tests/e2e/**'],
+    // Dummy values so modules that eagerly construct the Supabase client
+    // (src/lib/supabase.ts) don't throw on import when no real env/.env.local
+    // is present — real network calls are never exercised by unit tests.
+    env: {
+      VITE_SUPABASE_URL: 'https://test.supabase.co',
+      VITE_SUPABASE_ANON_KEY: 'test-anon-key',
+    },
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'lcov'],
