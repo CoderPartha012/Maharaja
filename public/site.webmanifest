@@ -1,0 +1,21 @@
+{
+  "name": "Maharaja - Authentic Indian Fine Dining",
+  "short_name": "Maharaja",
+  "description": "Experience authentic Indian cuisine at Maharaja Restaurant.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFF8DC",
+  "theme_color": "#D4AF37",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

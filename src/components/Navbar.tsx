@@ -1,59 +1,156 @@
-import React, { useState } from 'react';
-import { Menu, X, Phone } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Menu, X, Phone, ShoppingCart } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useCart } from '../lib/cart';
+
+const NAV_LINKS = [
+  { to: '/', label: 'Home' },
+  { to: '/menu', label: 'Menu' },
+  { to: '/reservations', label: 'Reservations' },
+  { to: '/gallery', label: 'Gallery' },
+  { to: '/contact', label: 'Contact' },
+  { to: '/help', label: 'Help' },
+];
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const location = useLocation();
+  const { pathname } = useLocation();
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const { itemCount, openCart } = useCart();
 
-  // Scroll to top when route changes
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [location.pathname]);
+    setIsOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        setIsOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen]);
+
+  const linkClass = (to: string) =>
+    `text-gray-700 hover:text-[#7A5C00] transition-colors ${
+      pathname === to ? 'font-semibold text-[#7A5C00]' : ''
+    }`;
 
   return (
-    <nav className="bg-white shadow-md fixed w-full z-50">
+    <nav className="bg-white shadow-md fixed w-full z-50" aria-label="Main navigation">
       <div className="container-custom">
         <div className="flex justify-between items-center h-20">
-          <div className="flex items-center">
-            <Link to="/" className="text-2xl font-bold text-[#D4AF37]">Maharaja</Link>
-          </div>
+          {/* Logo */}
+          <Link to="/" className="text-2xl font-bold text-[#7A5C00]" aria-label="Maharaja — Home">
+            Maharaja
+          </Link>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link to="/" className="text-gray-700 hover:text-[#D4AF37] transition-colors">Home</Link>
-            <Link to="/menu" className="text-gray-700 hover:text-[#D4AF37] transition-colors">Menu</Link>
-            <Link to="/reservations" className="text-gray-700 hover:text-[#D4AF37] transition-colors">Reservations</Link>
-            <Link to="/gallery" className="text-gray-700 hover:text-[#D4AF37] transition-colors">Gallery</Link>
-            <Link to="/contact" className="text-gray-700 hover:text-[#D4AF37] transition-colors">Contact</Link>
-            <Link to="/reservations" className="btn-primary flex items-center">
-              <Phone className="w-4 h-4 mr-2" />
+            {NAV_LINKS.map(({ to, label }) => (
+              <Link
+                key={to}
+                to={to}
+                className={linkClass(to)}
+                aria-current={pathname === to ? 'page' : undefined}
+              >
+                {label}
+              </Link>
+            ))}
+
+            {/* Cart icon */}
+            <button
+              type="button"
+              onClick={openCart}
+              className="relative text-gray-700 hover:text-[#7A5C00] transition-colors p-1"
+              aria-label={
+                itemCount > 0
+                  ? `Open cart — ${itemCount} item${itemCount !== 1 ? 's' : ''}`
+                  : 'Open cart'
+              }
+            >
+              <ShoppingCart className="w-5 h-5" aria-hidden="true" />
+              {itemCount > 0 && (
+                <span
+                  className="absolute -top-1.5 -right-1.5 bg-[#D4AF37] text-[#1A1000] text-[10px] font-bold rounded-full w-4.5 h-4.5 min-w-[18px] min-h-[18px] flex items-center justify-center leading-none px-0.5"
+                  aria-hidden="true"
+                >
+                  {itemCount > 9 ? '9+' : itemCount}
+                </span>
+              )}
+            </button>
+
+            <Link to="/reservations" className="btn-primary flex items-center gap-2">
+              <Phone className="w-4 h-4" aria-hidden="true" />
               Book Now
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden">
-            <button onClick={() => setIsOpen(!isOpen)} className="text-gray-700">
-              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          {/* Mobile: cart + hamburger */}
+          <div className="md:hidden flex items-center gap-2">
+            <button
+              type="button"
+              onClick={openCart}
+              className="relative text-gray-700 hover:text-[#7A5C00] transition-colors p-2"
+              aria-label={
+                itemCount > 0
+                  ? `Open cart — ${itemCount} item${itemCount !== 1 ? 's' : ''}`
+                  : 'Open cart'
+              }
+            >
+              <ShoppingCart className="w-5 h-5" aria-hidden="true" />
+              {itemCount > 0 && (
+                <span
+                  className="absolute top-0.5 right-0.5 bg-[#D4AF37] text-[#1A1000] text-[10px] font-bold rounded-full min-w-[16px] min-h-[16px] flex items-center justify-center leading-none px-0.5"
+                  aria-hidden="true"
+                >
+                  {itemCount > 9 ? '9+' : itemCount}
+                </span>
+              )}
+            </button>
+
+            <button
+              type="button"
+              ref={menuButtonRef}
+              onClick={() => setIsOpen((o) => !o)}
+              className="text-gray-700 p-2 rounded-md hover:bg-gray-100 transition-colors"
+              aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
+              aria-expanded={isOpen}
+              aria-controls="mobile-menu"
+            >
+              {isOpen ? (
+                <X className="h-6 w-6" aria-hidden="true" />
+              ) : (
+                <Menu className="h-6 w-6" aria-hidden="true" />
+              )}
             </button>
           </div>
         </div>
 
         {/* Mobile Menu */}
-        {isOpen && (
-          <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              <Link to="/" className="block px-3 py-2 text-gray-700 hover:text-[#D4AF37]">Home</Link>
-              <Link to="/menu" className="block px-3 py-2 text-gray-700 hover:text-[#D4AF37]">Menu</Link>
-              <Link to="/reservations" className="block px-3 py-2 text-gray-700 hover:text-[#D4AF37]">Reservations</Link>
-              <Link to="/gallery" className="block px-3 py-2 text-gray-700 hover:text-[#D4AF37]">Gallery</Link>
-              <Link to="/contact" className="block px-3 py-2 text-gray-700 hover:text-[#D4AF37]">Contact</Link>
-              <Link to="/reservations" className="btn-primary w-full mt-4">Book Now</Link>
-            </div>
+        <div
+          id="mobile-menu"
+          className={`md:hidden ${isOpen ? 'block' : 'hidden'}`}
+          aria-hidden={!isOpen}
+        >
+          <div className="px-2 pt-2 pb-4 space-y-1">
+            {NAV_LINKS.map(({ to, label }) => (
+              <Link
+                key={to}
+                to={to}
+                className={`block px-3 py-2 rounded-md ${linkClass(to)} hover:bg-gray-50`}
+                aria-current={pathname === to ? 'page' : undefined}
+              >
+                {label}
+              </Link>
+            ))}
+            <Link to="/reservations" className="btn-primary w-full mt-3 text-center block">
+              Book Now
+            </Link>
           </div>
-        )}
+        </div>
       </div>
     </nav>
   );

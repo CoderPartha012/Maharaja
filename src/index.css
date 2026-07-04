@@ -4,11 +4,13 @@
 
 @layer base {
   :root {
-    --color-primary: #D4AF37;
-    --color-secondary: #8B4513;
-    --color-accent: #FF4500;
-    --color-background: #FFF8DC;
-    --color-text: #2D2D2D;
+    --color-primary: #d4af37; /* decorative gold — backgrounds, borders */
+    --color-primary-text: #7a5c00; /* accessible gold — text/icons on light bg, 5.71:1 on white */
+    --color-primary-btn-text: #1a1000; /* button label on gold bg, 8.4:1 */
+    --color-secondary: #8b4513;
+    --color-accent: #ff4500;
+    --color-background: #fff8dc;
+    --color-text: #2d2d2d;
   }
 
   body {
@@ -17,16 +19,32 @@
     background-color: var(--color-background);
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: 'Playfair Display', serif;
+  }
+
+  /* Global focus-visible ring — 3px accessible gold, never hidden */
+  *:focus-visible {
+    outline: 3px solid #7a5c00;
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  *:focus:not(:focus-visible) {
+    outline: none;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply px-6 py-3 bg-[#D4AF37] text-white rounded-full font-semibold 
-           transition-all duration-300 hover:bg-[#B8960C] focus:ring-2 
-           focus:ring-[#D4AF37] focus:ring-opacity-50;
+    @apply px-6 py-3 bg-[#D4AF37] text-[#1A1000] rounded-full font-semibold
+           transition-all duration-300 hover:bg-[#B8960C]
+           focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#7A5C00] focus-visible:ring-offset-2;
   }
 
   .container-custom {
@@ -36,12 +54,37 @@
   .section-padding {
     @apply py-16 md:py-24;
   }
+
+  /* Form field error text */
+  .field-error {
+    @apply text-red-600 text-sm mt-1;
+  }
+
+  /* Shimmer skeleton animation */
+  .skeleton {
+    @apply bg-gray-200 rounded animate-pulse;
+  }
+}
+
+/* NProgress bar — accessible gold */
+#nprogress .bar {
+  background: #7a5c00 !important;
+  height: 3px !important;
+}
+#nprogress .peg {
+  box-shadow:
+    0 0 10px #7a5c00,
+    0 0 5px #7a5c00 !important;
 }
 
 /* Custom Animations */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .animate-fadeIn {
