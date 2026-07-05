@@ -48,7 +48,7 @@ export default function AdminUpcomingPage() {
   const [dateFrom, setDateFrom] = useState(todayIso());
   const [dateTo, setDateTo] = useState('');
 
-  const fetch = useCallback(async () => {
+  const fetchReservations = useCallback(async () => {
     setLoading(true);
 
     let query = supabase
@@ -72,8 +72,8 @@ export default function AdminUpcomingPage() {
   }, [page, search, statusFilter, dateFrom, dateTo]);
 
   useEffect(() => {
-    void fetch();
-  }, [fetch]);
+    void fetchReservations();
+  }, [fetchReservations]);
 
   // Reset page when filters change
   useEffect(() => {
@@ -105,7 +105,7 @@ export default function AdminUpcomingPage() {
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold text-white">Upcoming Reservations</h1>
           <button
-            onClick={() => void fetch()}
+            onClick={() => void fetchReservations()}
             disabled={loading}
             className="flex items-center gap-2 px-3 py-2 text-sm text-gray-300 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors disabled:opacity-50"
           >
