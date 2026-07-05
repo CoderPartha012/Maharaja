@@ -133,6 +133,7 @@ export default function AdminUpcomingPage() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as ReservationStatus | '')}
+            aria-label="Filter by status"
             className="bg-gray-800 text-white border border-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent"
           >
             {STATUS_OPTIONS.map(({ value, label }) => (
