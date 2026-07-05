@@ -20,14 +20,14 @@ const reservationSchema = z.object({
     .string()
     .min(10, 'Enter at least 10 digits')
     .regex(/^\+?[\d\s\-()]+$/, 'Invalid phone number'),
-  email: z.string().email('Invalid email address').or(z.literal('')).optional().default(''),
+  email: z.string().email('Invalid email address').or(z.literal('')).optional(),
   date: z
     .string()
     .min(1, 'Please select a date')
     .refine((val) => val >= todayIso(), 'Date must be today or in the future'),
   time: z.string().min(1, 'Please select a time slot'),
   guests: z.coerce.number().int().min(1).max(8),
-  specialRequests: z.string().optional().default(''),
+  specialRequests: z.string().optional(),
 });
 
 export type ReservationFormData = z.infer<typeof reservationSchema>;
@@ -66,9 +66,8 @@ const ReservationPage = ({ onSuccess }: ReservationPageProps = {}) => {
   const {
     register,
     handleSubmit,
-    getValues,
     formState: { errors },
-  } = useForm<ReservationFormData>({
+  } = useForm({
     resolver: zodResolver(reservationSchema),
     defaultValues: { guests: 2 },
   });
@@ -139,9 +138,7 @@ const ReservationPage = ({ onSuccess }: ReservationPageProps = {}) => {
 
   const retry = () => {
     setSubmitError(null);
-    const data = getValues();
-    pendingData.current = data;
-    captchaRef.current?.execute();
+    void handleSubmit(onSubmit)();
   };
 
   return (

@@ -21,7 +21,7 @@ const checkoutSchema = z
       .string()
       .min(10, 'Enter at least 10 digits')
       .regex(/^\+?[\d\s\-()]+$/, 'Invalid phone number'),
-    email: z.string().email('Invalid email').or(z.literal('')).optional().default(''),
+    email: z.string().email('Invalid email').or(z.literal('')).optional(),
     orderType: z.enum(['dine-in', 'takeaway', 'delivery']),
     address: z.string().optional(),
     tableNumber: z.string().optional(),
